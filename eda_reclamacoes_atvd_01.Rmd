@@ -1,0 +1,52 @@
+---
+title: "Eda_atvd_01"
+output: html_document
+---
+
+```{r warning=FALSE}
+library(tidyverse)
+```
+
+
+##Selecionando os dados do arquivo e setando as variaveis<-----
+
+```{r}
+reclamacoes = read_csv("data/reclamacoes-raw/reclamacoes-raw.csv", 
+                      col_types = "")
+
+
+reclamacoes = reclamacoes %>% 
+    select(orgao = `orgao`,
+           link = `link`,
+           titulo = `titulo`)
+glimpse(reclamacoes)
+
+```
+
+
+##reclamacoes ordenadas por grupo; grafico orgao X n (tamanho da amostra) <------
+
+```{r}
+
+reclamacoes %>% 
+    group_by(orgao) %>% 
+    count() %>% 
+    ggplot(aes("orgao", n)) + 
+    geom_jitter(width = .05, alpha = .7)
+
+```
+
+## media e mediana dos orgaos <------
+
+```{r}
+
+reclamacoes %>% 
+    group_by(orgao) %>% 
+    count() %>%
+    ungroup() %>% 
+    summarise(media = mean(n), 
+              mediana = median(n))
+
+```
+
+
